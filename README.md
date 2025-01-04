@@ -2,12 +2,8 @@
 
 Evolvium is an open-source evolution simulator that demonstrates natural selection, population dynamics, and emergent behaviors in complex systems. Built in Python and visualized using Pygame, Evolvium creates an environment where digital organisms compete, evolve, and adapt.
 
-## Features
+![image alt text](https://github.com/matanitah/evolvium/blob/main/evolvium.png?raw=true)
 
-- **Real-time Visualization**: Watch evolution happen before your eyes with a color-coded grid system
-- **Complex Cell Types**: Multiple specialized cells that form organism behaviors
-- **Natural Selection**: Organisms compete for resources and evolve through reproduction and mutation
-- **Emergent Behaviors**: Watch as organisms develop different survival strategies!
 
 ## Installation
 
