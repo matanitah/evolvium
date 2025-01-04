@@ -23,8 +23,9 @@ class Organism:
             elif cell_type == CellType.BUILDER:
                 self._process_builder(x, y)
 
-        self.energy -= len(self.cells)
-        self._die()
+        self.energy -= len(self.cells) * 0.7
+        if self.energy <= 0:
+            self._die()
 
     def _die(self):
         for c in self.cells:
