@@ -29,6 +29,7 @@ class Organism:
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
             if cell.type == CellType.FOOD:
                 self.energy += 10
+                self.food_eaten += 1
                 self.grid.set_cell(adj_x, adj_y, Cell())
 
     def _process_producer(self, x, y):
@@ -37,16 +38,56 @@ class Organism:
                 self.grid.set_cell(adj_x, adj_y, Cell(CellType.FOOD))
 
     def _process_mover(self, x, y):
-        if random.random() < 0.2:
+        if random.random() < 0.2:  # 20% chance to move each tick
+            # Choose random direction
             dx = random.choice([-1, 0, 1])
             dy = random.choice([-1, 0, 1])
-            # Movement logic (simplified for brevity)
-            pass
+            
+            # Calculate new positions for all cells
+            new_positions = [
+                (cell_x + dx, cell_y + dy, cell_type)
+                for cell_x, cell_y, cell_type in self.cells
+            ]
+            
+            # Check if movement is valid
+            can_move = True
+            for new_x, new_y, _ in new_positions:
+                # Check boundaries
+                if not (0 <= new_x < self.grid.width and 0 <= new_y < self.grid.height):
+                    can_move = False
+                    break
+                
+                # Get cell at new position
+                target_cell = self.grid.get_cell(new_x, new_y)
+                
+                # Check if target cell is occupied by something other than our own cells
+                if (target_cell.type != CellType.EMPTY and 
+                    not any(x == new_x and y == new_y for x, y, _ in self.cells)):
+                    can_move = False
+                    break
+            
+            # If movement is valid, update organism position
+            if can_move:
+                # Clear old positions
+                for old_x, old_y, _ in self.cells:
+                    self.grid.set_cell(old_x, old_y, Cell(CellType.EMPTY))
+                
+                # Update cells list with new positions
+                self.cells = new_positions
+                
+                # Set new positions in grid
+                for new_x, new_y, cell_type in new_positions:
+                    new_cell = Cell(cell_type)
+                    new_cell.organism = self
+                    self.grid.set_cell(new_x, new_y, new_cell)
+                
+                # Movement costs energy
+                self.energy -= 1
 
     def _process_killer(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
             if cell.organism and cell.organism != self:
-                if not any(c.type == CellType.ARMOR for c in cell.organism.cells):
+                if not any(c[2] == CellType.ARMOR for c in cell.organism.cells):
                     cell.organism.energy -= 20
 
     def _process_builder(self, x, y):
