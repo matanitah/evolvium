@@ -94,5 +94,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Matan Itah - [LinkedIn](https://linkedin.com/matan-itah)
+Matan Itah - [LinkedIn](https://www.linkedin.com/in/matan-itah/)
 Project Link: [https://github.com/matanitah/evolvium](https://github.com/matanitah/evolvium)
