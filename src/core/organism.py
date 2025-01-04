@@ -23,12 +23,17 @@ class Organism:
             elif cell_type == CellType.BUILDER:
                 self._process_builder(x, y)
 
-        self.energy -= len(self.cells) * 0.1
+        self.energy -= len(self.cells)
+        self._die()
+
+    def _die(self):
+        for c in self.cells:
+            self.grid.set_cell(c[0], c[1], Cell(CellType.EMPTY))
 
     def _process_mouth(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
             if cell.type == CellType.FOOD:
-                self.energy += 10
+                self.energy += 5
                 self.food_eaten += 1
                 self.grid.set_cell(adj_x, adj_y, Cell())
 
