@@ -34,7 +34,7 @@ class Organism:
     def _process_mouth(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
             if cell.type == CellType.FOOD:
-                self.energy += 5
+                self.energy += 1
                 self.food_eaten += 1
                 self.grid.set_cell(adj_x, adj_y, Cell())
 
@@ -92,9 +92,12 @@ class Organism:
 
     def _process_killer(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
-            if cell.organism and cell.organism != self:
-                if not any(c[2] == CellType.ARMOR for c in cell.organism.cells):
-                    cell.organism.energy -= 20
+            if cell.organism:
+                if cell.organism != self:
+                    if not any(c[2] == CellType.ARMOR for c in cell.organism.cells):
+                        cell.organism.energy -= 20
+            elif cell.type == CellType.WALL:
+                self.grid.set_cell(adj_x, adj_y, Cell(CellType.EMPTY))
 
     def _process_builder(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
