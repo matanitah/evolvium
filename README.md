@@ -26,19 +26,12 @@ python main.py
 ```
 
 ## Cell Types
-
-### Independent Cells
-- **Empty** (Dark Blue): Inert cells that can be occupied
-- **Food** (Grayish-Blue): Provides nourishment for organisms
-- **Wall** (Gray): Blocks organism movement and reproduction
-
-### Organism Cells
-- **Mouth** (Orange): Consumes food from adjacent cells
-- **Producer** (Green): Generates food in adjacent empty cells
-- **Mover** (Light Blue): Enables organism movement and rotation
-- **Killer** (Red): Damages adjacent organisms
-- **Armor** (Purple): Protects against killer cells
-- **Builder** (Brown): Constructs walls in adjacent empty cells
+- **Mouth** (Orange): Consumes food from adjacent cells.
+- **Producer** (Green): Generates food in adjacent empty cells.
+- **Mover** (Light Blue): Enables organism movement and rotation.
+- **Killer** (Red): Damages adjacent organisms and breaks walls.
+- **Armor** (Purple): Protects against killer cells.
+- **Builder** (Brown): Constructs walls in adjacent empty cells, which block organism movement and reproduction.
 
 ## Organism Behavior
 
