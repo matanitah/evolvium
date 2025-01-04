@@ -156,7 +156,8 @@ class Organism:
         offspring_cells = self.cells.copy()
         
         # Apply mutation
-        self._mutate(offspring_cells)
+        if random.random() < 0.2:
+            self._mutate(offspring_cells)
         
         # Calculate minimum safe distance
         max_organism_dimension = max(
