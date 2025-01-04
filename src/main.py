@@ -5,9 +5,6 @@ from core.simulation import Simulation
 from visualization.renderer import Renderer
 
 def main():
-    print(f"GRID WIDTH: {GRID_WIDTH}")
-    print(f"GRID WIDTH: {GRID_HEIGHT}")
-
     simulation = Simulation(GRID_WIDTH, GRID_HEIGHT)
     renderer = Renderer(GRID_WIDTH, GRID_HEIGHT)
     clock = pygame.time.Clock()

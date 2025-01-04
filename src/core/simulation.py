@@ -12,13 +12,13 @@ class Simulation:
 
     def initialize(self):
         # Add some initial food
-        for _ in range(self.grid.width * self.grid.height // 10):
+        for _ in range(self.grid.width * self.grid.height // 5):
             x = random.randint(0, self.grid.width - 1)
             y = random.randint(0, self.grid.height - 1)
             self.grid.set_cell(x, y, Cell(CellType.FOOD))
 
         # Add some initial organisms
-        for _ in range(10):
+        for _ in range(250):
             self.spawn_random_organism()
 
     def spawn_random_organism(self):
@@ -53,7 +53,10 @@ class Simulation:
             if organism.energy <= 0:
                 # Remove organism cells from grid
                 for x, y, _ in organism.cells:
-                    self.grid.set_cell(x, y, Cell())
+                    if random.random() < 0.3:
+                        self.grid.set_cell(x, y, Cell(CellType.FOOD))
+                    else:
+                        self.grid.set_cell(x, y, Cell())
                 self.organisms.remove(organism)
 
         # Add new organisms

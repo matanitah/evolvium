@@ -6,11 +6,28 @@ class Organism:
     def __init__(self, grid, cells):
         self.grid = grid
         self.cells = cells  # List of (x, y, CellType) tuples
-        self.energy = 100
+        self.energy = 500
         self.food_eaten = 0
+        self.max_cells = 9
         
     def update(self):
-        # Process each cell's behavior
+        # Apply base energy cost per cell (higher cost for special cells)
+        for _, _, cell_type in self.cells:
+            base_cost = 0.1
+            if cell_type == CellType.MOUTH:
+                base_cost *= 250  # Mouths cost 200x more
+            elif cell_type == CellType.PRODUCER:
+                base_cost *= 2  # Producers cost 2x more
+            elif cell_type == CellType.KILLER:
+                base_cost *= 5  # Killers cost 2.5x more
+            
+            if len(self.cells) <= 3:
+                self.energy -= base_cost
+            else:
+                self.energy -= base_cost * len(self.cells)
+        
+        
+        # Process cell behaviors
         for x, y, cell_type in self.cells:
             if cell_type == CellType.MOUTH:
                 self._process_mouth(x, y)
@@ -23,18 +40,11 @@ class Organism:
             elif cell_type == CellType.BUILDER:
                 self._process_builder(x, y)
 
-        self.energy -= len(self.cells) * 0.7
-        if self.energy <= 0:
-            self._die()
-
-    def _die(self):
-        for c in self.cells:
-            self.grid.set_cell(c[0], c[1], Cell(CellType.EMPTY))
 
     def _process_mouth(self, x, y):
         for (adj_x, adj_y), cell in self.grid.get_adjacent_cells(x, y):
             if cell.type == CellType.FOOD:
-                self.energy += 1
+                self.energy += 5
                 self.food_eaten += 1
                 self.grid.set_cell(adj_x, adj_y, Cell())
 
@@ -113,7 +123,7 @@ class Organism:
                 idx = random.randrange(len(cells))
                 x, y, _ = cells[idx]
                 new_type = random.choice([
-                    CellType.MOUTH, CellType.PRODUCER, CellType.MOVER,
+                    CellType.PRODUCER, CellType.MOVER,
                     CellType.KILLER, CellType.ARMOR, CellType.BUILDER
                 ])
                 cells[idx] = (x, y, new_type)
@@ -126,7 +136,7 @@ class Organism:
                 
         elif mutation_type == 'add':
             # Add a cell adjacent to an existing one
-            if cells:
+            if len(cells) < self.max_cells:
                 # Select random existing cell
                 base_x, base_y, _ = random.choice(cells)
                 
@@ -146,7 +156,7 @@ class Organism:
                 if valid_positions:
                     new_x, new_y = random.choice(valid_positions)
                     new_type = random.choice([
-                        CellType.MOUTH, CellType.PRODUCER, CellType.MOVER,
+                        CellType.PRODUCER, CellType.MOVER,
                         CellType.KILLER, CellType.ARMOR, CellType.BUILDER
                     ])
                     cells.append((new_x, new_y, new_type))
@@ -156,7 +166,7 @@ class Organism:
         offspring_cells = self.cells.copy()
         
         # Apply mutation
-        if random.random() < 0.2:
+        if random.random() < 0.01:
             self._mutate(offspring_cells)
         
         # Calculate minimum safe distance
